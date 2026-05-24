@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>FES SLIPNET IMPORTER FOR ETHIOTELECOM SIM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e1a;
+            color: #e0e6f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container { max-width: 480px; width: 100%; }
+
+        /* ---- CHANNEL GATE (shown first) ---- */
+        #gate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            text-align: center;
+        }
+        #gate .logo {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        #gate h2 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        #gate p {
+            font-size: 14px;
+            color: #8892b0;
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+        #gate .channel-link {
+            display: inline-block;
+            color: #00c6ff;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 10px 24px;
+            border: 1px solid #00c6ff44;
+            border-radius: 12px;
+            margin: 12px 0 20px;
+            background: #00c6ff0a;
+        }
+        #gate .channel-link:hover { background: #00c6ff1a; }
+        .gate-buttons {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+            max-width: 320px;
+        }
+        .gate-buttons button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .gate-buttons button:active { opacity: 0.7; }
+        .btn-yes {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: #fff;
+        }
+        .btn-no {
+            background: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+        }
+        #gate .small-note {
+            font-size: 12px;
+            color: #475569;
+            margin-top: 16px;
+        }
+
+        /* ---- MAIN CONTENT (hidden until yes) ---- */
+        #main {
+            display: none;
+        }
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+        }
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.3;
+        }
+        .header .sub {
+            font-size: 13px;
+            color: #8892b0;
+            margin-top: 6px;
+        }
+        .badge {
+            display: inline-block;
+            background: #1a1f35;
+            color: #64ffda;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 10px;
+            border: 1px solid #64ffda33;
+        }
+        .download-apk {
+            text-align: center;
+            margin: 10px 0 6px;
+        }
+        .download-apk a {
+            color: #64ffda;
+            font-size: 13px;
+            text-decoration: none;
+            border-bottom: 1px dashed #64ffda55;
+        }
+        .config-card {
+            background: #111827;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #1e293b;
+        }
+        .config-card .title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .config-card .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .config-card .protocol {
+            font-size: 11px;
+            font-weight: 500;
+            color: #94a3b8;
+            background: #1e293b;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+        .config-card .desc {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 14px;
+        }
+        .import-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .import-btn:active { opacity: 0.8; }
+        .note {
+            text-align: center;
+            font-size: 13px;
+            color: #475569;
+            margin-top: 10px;
+            padding: 16px;
+            line-height: 1.6;
+        }
+        .note a { color: #00c6ff; text-decoration: none; }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #334155;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ===== GATE: JOIN CHANNEL? ===== -->
+        <div id="gate">
+            <div class="logo">📡</div>
+            <h2>FES SLIPNET IMPORTER</h2>
+            <p>FOR ETHIOTELECOM SIM</p>
+            <p style="margin-top:12px; color:#94a3b8;">
+                Before using the configs,<br>please join our community:
+            </p>
+            <a class="channel-link" href="https://t.me/Free_Ethio_server_FES" target="_blank">
+                ➕ @Free_Ethio_server_FES
+            </a>
+            <p style="color:#64748b; font-size:13px;">Have you joined the channel?</p>
+            <div class="gate-buttons">
+                <button class="btn-yes" onclick="enterSite()">✅ Yes</button>
+                <button class="btn-no" onclick="showJoinReminder()">❌ No</button>
+            </div>
+            <div class="small-note" id="gate-message"></div>
+        </div>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div id="main">
+            <div class="header">
+                <h1>FES SLIPNET IMPORTER<br>FOR ETHIOTELECOM SIM</h1>
+                <div class="sub">Internet Free • NoizDNS</div>
+                <span class="badge">🔒 Tap to Import — No Copy-Paste</span>
+                <div class="download-apk">
+                    <a href="https://github.com/anonvector/SlipNet/releases/latest" target="_blank">📲 Get SlipNet APK</a>
+                </div>
+            </div>
+
+            <!-- CONFIG 1 -->
+            <div class="config-card">
+                <div class="title-row">
+                    <span class="name">📡 ETHIO FES 1</span>
+                    <span class="protocol">NoizDNS</span>
+                </div>
+                <div class="desc">Primary — fast & stable</div>
+                <a class="import-btn" href="slipnet-enc://AbZ3ZCsYLjRieRgckf1KPhKYyqNsTEyHsYP2xAmKFLCvRuAk+fyS5PVWBLICsiw/p5qqcQ549rtNu6tPyvuan2PxB2wJg3gqJi/6jy8KLr1FWr4ePLn5pLOyOk3/BVXiZBWrGbN4cehzaN04kV+c0oCPGrzbxwPQu5D0svErZzOS865sr8Iu8XLQTr/NmgUkSGnwXGv96kYfoome6jkEqiclLB/i2b8JoBQiA4PI1NAMN1XrpgdN31UG9dhndM8n7TyFdi/EP2cuL0+29+21VYC0OQZHGvibDLP1XAsjT0gCJLTIhy9pD/yyLudZi2FUSliS75tMHH9oK+gvgB5QNbBUWJZDf6yzj9o2/b9L1RMv8iAyZBUGdlESjlzCQgm/efOpAYrEHPxvrf+WMkPTwfR991CGzkNpJmMdN3+F1HE7hkvYa0Txtkt9wTMRxS41NMPcnXjAo0Q9TySQhlcQJHlxxRiZ+W4xSXkeZ63KnW2ecu0bLWv4BIm5L02Jw5ONTDts9XG7mh293uQP57WFPw9njLC8ZWC9WwP8KZWF+WPijhGfMs7vuF2XvpPY4h2lCcsA+C/QQXbtcKviVfdRWzmSq4beJdwMNKIxtSJc4KjJhJV4VvlxJIkgwXB8/fcEiN60xyJYAT27HBCB">⬇ Import into SlipNet</a>
+            </div>
+
+            <!-- CONFIG 2 -->
+            <div class="config-card">
+                <div class="title-row">
+                    <span class="name">📡 ETHIO FES FREE 2</span>
+                    <span class="protocol">Fast Free</span>
+                </div>
+                <div class="desc">High-speed free tier</div>
+                <a class="import-btn" href="slipnet-enc://AXKpl706KrXsBkoGX7qRrFGyMBXmKTofvVmXcHoRpKLpIj4xuk7EG0f68SpFGRQHSvj1pDon7wXJa1ZzLQeNTVK2veWGpX3rdRdNhkLCExM2Gki7m2VdVsKAX91aBxXsI4tCBFvlwLXsD/z3jf6v5U0HeZEwFOCkwLErOpeyGjbNkXaNHLR6Z+f0oIbt1kMIyLfTwHLYDWr/bnNfmfJWIWdtv9uvwte+074EMOahlGlfy21COfcbI4SDCMskHPOgHotcGO+b9XwjbE9yziU4QzjmHWboFIHofgf8pugSgyetgGbrBNVBzXezv88BKxQNDntuo2wX34rZvlL1VZq2Xf9vUY7GCl6CXv3MF/yRIqvaJKT1L3/ARz87MVzzzcE9Bv826ECgX1GWDx/pviUnwBJUglkxYVEPVnkN+BmZ3wqEZZHqT9uttaMl3Ms4zf7NLlfjqbvHZUa804Jgc7ggaVscrZ98zrPtZxeCrc5qb1AYF+gbqLkQjJlY25CAvs2dSJUZ12uriwHnbEuEOMHK24N46jgEvzMBwYoX/AGb6K08jR5Yr09q2AWsshYF6lQFAXXKj+3RSY3bV0z5mRGlICWiCgNQiGkVitwpBpzLTbl8ubh/YiOvx9G3W9a9PQPKgYHzCaM=">⬇ Import into SlipNet</a>
+            </div>
+
+            <!-- CONFIG 3 -->
+            <div class="config-card">
+                <div class="title-row">
+                    <span class="name">📡 ETHIO FES FREE 3</span>
+                    <span class="protocol">Fast Free</span>
+                </div>
+                <div class="desc">Alternative server — backup config</div>
+                <a class="import-btn" href="slipnet-enc://AYfh7YLSrbMJC7vA5U9WZEIxA1o8wBT0eKhBaMUk88SPgPs5dYM394VWR4sPshHxJ6LPdob5lVNJZQ6Y6B29skkltDB0DpDFrAAoKFI0OTBMOa7vghDiH0LQbW/mgT6CjuvgvIrqrVyFWpjrzRycW+pEJwoUjBNMYw3bZ1s4iOMot8lsSZOE3bNL1XFbSqv0ydpXAMugZDFspuO7epWtufGwCahQGTMvKVTVWLzSi9jw27InrQww/Stjk184FVNoQevA6tW3UO8I6i/AUOuXbphh8FP7p7oschLfzka8CoLKQfwxbH/nmABKIvR6r+8NWTXcYq688QjoWNxqXBd7ks40TvzR7LwW7RvFwP/0kLIGSakfj1QcIJHJbAZ+qg2uTcaHPPlhJlXXsixSHrjnBwC3ECmYJIai6fzOz89exZw2B7zdJkqavb4fdGPEGhdYMLIDJmb44iHC2Ji/nrXVtkzcOXDjkGlWxrf2mRHYRwu2DBa4AcvhYu5cKQSljRUBJ05VsEe+Khd341UTZ9mPrUAUUY7rPAC0Yke92vGhAcmjWIjWYs8Bx7JTqvMKam2SzDSxlZEQJ1Fa6v33IT7bFEd3VshffbSI9aIIpjFHlqgULxAZuvW5xaoZSuT15Yuck3FPdL32PwZQnI8gVnzkjTAimTwyOIiKVZTNhtJpzdq8Vodvx7ZJOrrfXH9Ut2xggSbVFrS3+HM7MFvGjYYPBn6iIszV/7BkMo+iwYcNOoOvE9BR8dgoirsdqvoE7wntEmcYC3K53AxdMRC8AxP+TWleXu77iez7M/3iS2ypoPRGUaZ/SAcdntsN5N37ce0P3fSz6+WhHl01K1bOzdti/FDraoSW0bc4ldqrKHu7PYPI8EfxRl1G/EWfSTb1foZrEajZiaX3f1sBYgGoZMvcpUS62AnodrUacv3dFCfWWGTtGq3CLoKWXo7COjD9+FY6kLBBd4WNrfVT+yP/01oDGYYXkBPykjgxDq47yrFBOGbPmTZ28rN8VzQjL2gCchbYbcV19myGTcKhtFpiuNTC0Q==">⬇ Import into SlipNet</a>
+            </div>
+
+            <!-- CONFIG 4 (mirror) -->
+            <div class="config-card">
+                <div class="title-row">
+                    <span class="name">📡 ETHIO FES 1 (Mirror)</span>
+                    <span class="protocol">NoizDNS</span>
+                </div>
+                <div class="desc">Duplicate — same as config #1</div>
+                <a class="import-btn" href="slipnet-enc://AbZ3ZCsYLjRieRgckf1KPhKYyqNsTEyHsYP2xAmKFLCvRuAk+fyS5PVWBLICsiw/p5qqcQ549rtNu6tPyvuan2PxB2wJg3gqJi/6jy8KLr1FWr4ePLn5pLOyOk3/BVXiZBWrGbN4cehzaN04kV+c0oCPGrzbxwPQu5D0svErZzOS865sr8Iu8XLQTr/NmgUkSGnwXGv96kYfoome6jkEqiclLB/i2b8JoBQiA4PI1NAMN1XrpgdN31UG9dhndM8n7TyFdi
+                <!-- CONFIG 4 (mirror) -->
+            <div class="config-card">
+                <div class="title-row">
+                    <span class="name">📡 ETHIO FES 1 (Mirror)</span>
+                    <span class="protocol">NoizDNS</span>
+                </div>
+                <div class="desc"> </div>
+                <a class="import-btn" href="slipnet-enc://AbZ3ZCsYLjRieRgckf1KPhKYyqNsTEyHsYP2xAmKFLCvRuAk+fyS5PVWBLICsiw/p5qqcQ549rtNu6tPyvuan2PxB2wJg3gqJi/6jy8KLr1FWr4ePLn5pLOyOk3/BVXiZBWrGbN4cehzaN04kV+c0oCPGrzbxwPQu5D0svErZzOS865sr8Iu8XLQTr/NmgUkSGnwXGv96kYfoome6jkEqiclLB/i2b8JoBQiA4PI1NAMN1XrpgdN31UG9dhndM8n7TyFdi/EP2cuL0+29+21VYC0OQZHGvibDLP1XAsjT0gCJLTIhy9pD/yyLudZi2FUSliS75tMHH9oK+gvgB5QNbBUWJZDf6yzj9o2/b9L1RMv8iAyZBUGdlESjlzCQgm/efOpAYrEHPxvrf+WMkPTwfR991CGzkNpJmMdN3+F1HE7hkvYa0Txtkt9wTMRxS41NMPcnXjAo0Q9TySQhlcQJHlxxRiZ+W4xSXkeZ63KnW2ecu0bLWv4BIm5L02Jw5ONTDts9XG7mh293uQP57WFPw9njLC8ZWC9WwP8KZWF+WPijhGfMs7vuF2XvpPY4h2lCcsA+C/QQXbtcKviVfdRWzmSq4beJdwMNKIxtSJc4KjJhJV4VvlxJIkgwXB8/fcEiN60xyJYAT27HBCB">⬇ Import into SlipNet</a>
+            </div>
+
+            <div class="note">
+                🔹 <strong>How it works:</strong> Tap any button → SlipNet opens and imports the profile automatically. Zero copy-paste.<br><br>
+                🔹 <strong>Need SlipNet?</strong> <a href="https://github.com/anonvector/SlipNet/releases/latest" target="_blank">Download from GitHub</a> or join <a href="https://t.me/SlipNet_app" target="_blank">@SlipNet_app</a><br><br>
+                🔹 <strong>After import:</strong> Profile → ✏️ → Scan Resolvers → Select green (E2E Passed) → Apply → Connect<br><br>
+                🔹 <strong>Community:</strong> <a href="https://t.me/Free_Ethio_server_FES" target="_blank">@Free_Ethio_server_FES</a>
+            </div>
+
+            <div class="footer">
+                FES • ETHIOTELECOM • NoizDNS
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function enterSite() {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('main').style.display = 'block';
+        }
+
+        function showJoinReminder() {
+            const msg = document.getElementById('gate-message');
+            msg.innerHTML = '❌ Please join <a href="https://t.me/Free_Ethio_server_FES" target="_blank" style="color:#00c6ff;">@Free_Ethio_server_FES</a> first, then click <strong>Yes</strong> to access the configs.';
+        }
+    </script>
+</body>
+</html>
