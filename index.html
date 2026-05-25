@@ -2,111 +2,434 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>FES SLIPNET IMPORTER FOR ETHIOTELECOM SIM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FES SLIPNET VPN - FREE ETHIO INTERNET 🔥</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0e1a;
-            color: #e0e6f0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .container { max-width: 480px; width: 100%; }
 
-        /* ---- CHANNEL GATE (shown first) ---- */
-        #gate {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: radial-gradient(ellipse at 20% 30%, #0a0a2e 0%, #060618 40%, #000000 100%);
+            color: #ddddf0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1400px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image:
+                radial-gradient(2px 2px at 15% 25%, rgba(0,212,255,0.4), transparent),
+                radial-gradient(2px 2px at 35% 65%, rgba(123,47,247,0.4), transparent),
+                radial-gradient(2px 2px at 55% 15%, rgba(255,78,205,0.4), transparent),
+                radial-gradient(2px 2px at 75% 75%, rgba(0,255,100,0.3), transparent),
+                radial-gradient(2px 2px at 90% 30%, rgba(255,200,0,0.3), transparent),
+                radial-gradient(2px 2px at 10% 80%, rgba(255,255,255,0.15), transparent),
+                radial-gradient(2px 2px at 50% 50%, rgba(0,200,255,0.2), transparent),
+                radial-gradient(3px 3px at 25% 45%, rgba(255,200,0,0.3), transparent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container { max-width: 860px; margin: 0 auto; padding: 1.5rem 1.2rem 2rem; position: relative; z-index: 1; transform-style: preserve-3d; }
+
+        /* ===== TELEGRAM GATE OVERLAY ===== */
+        .gate-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(30px);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 90vh;
-            text-align: center;
-        }
-        #gate .logo {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-        #gate h2 {
-            font-size: 20px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-        #gate p {
-            font-size: 14px;
-            color: #8892b0;
-            margin-bottom: 6px;
-            line-height: 1.6;
-        }
-        #gate .channel-link {
-            display: inline-block;
-            color: #00c6ff;
-            font-size: 15px;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 10px 24px;
-            border: 1px solid #00c6ff44;
-            border-radius: 12px;
-            margin: 12px 0 20px;
-            background: #00c6ff0a;
-        }
-        #gate .channel-link:hover { background: #00c6ff1a; }
-        .gate-buttons {
-            display: flex;
-            gap: 16px;
-            width: 100%;
-            max-width: 320px;
-        }
-        .gate-buttons button {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .gate-buttons button:active { opacity: 0.7; }
-        .btn-yes {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            color: #fff;
-        }
-        .btn-no {
-            background: #1e293b;
-            color: #94a3b8;
-            border: 1px solid #334155;
-        }
-        #gate .small-note {
-            font-size: 12px;
-            color: #475569;
-            margin-top: 16px;
+            z-index: 99999;
+            padding: 1.5rem;
+            animation: gateFadeIn 0.6s ease;
         }
 
-        /* ---- MAIN CONTENT (hidden until yes) ---- */
-        #main {
-            display: none;
-        }
-        .header {
+        @keyframes gateFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .gate-card {
+            background: linear-gradient(145deg, #0a0a28, #050510);
+            border: 2px solid rgba(0,212,255,0.15);
+            border-radius: 30px;
+            padding: 3rem 2.5rem;
+            max-width: 500px;
+            width: 100%;
             text-align: center;
-            padding: 30px 0 20px;
+            box-shadow: 0 30px 100px rgba(0,0,0,0.8), 0 0 80px rgba(0,212,255,0.05);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(800px) rotateX(2deg) rotateY(-2deg);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.3;
+
+        .gate-card:hover {
+            transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(20px);
+            box-shadow: 0 40px 140px rgba(0,0,0,0.9), 0 0 100px rgba(0,212,255,0.1);
         }
-        .header .sub {
+
+        .gate-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #ffcc00, #00ff88, #ff4ecd, #7b2ff7, #00d4ff);
+            background-size: 300% 100%;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer { 0% { background-position: 0% 0%; } 100% { background-position: 300% 0%; } }
+
+        .gate-card::after {
+            content: '🔥🔥🔥';
+            position: absolute;
+            bottom: 10px; right: 20px;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: float3d 3s ease-in-out infinite;
+        }
+
+        .gate-icon { font-size: 5rem; display: block; margin-bottom: 0.5rem; animation: float3d 3s ease-in-out infinite; transform: translateZ(30px); }
+
+        .gate-card h2 {
+            font-size: 1.9rem; font-weight: 900; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #00d4ff, #00ff88, #ffcc00, #ff4ecd);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transform: translateZ(25px);
+        }
+
+        .gate-card p { color: #9999bb; font-size: 0.95rem; margin-bottom: 0.5rem; line-height: 1.7; }
+        .gate-card .highlight { color: #ffdd44; font-weight: 700; }
+        .gate-fire { font-size: 2.5rem; margin: 1rem 0; display: block; animation: firePulse 1s ease-in-out infinite alternate; }
+
+        @keyframes firePulse {
+            from { transform: scale(1) translateZ(20px); text-shadow: 0 0 20px rgba(255,200,0,0.3); }
+            to { transform: scale(1.1) translateZ(30px); text-shadow: 0 0 40px rgba(255,200,0,0.6), 0 0 80px rgba(255,100,0,0.3); }
+        }
+
+        .gate-btn {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            background: linear-gradient(135deg, #0088cc, #00aaff);
+            color: #fff;
+            font-weight: 800; font-size: 1.1rem;
+            padding: 1rem 2.8rem;
+            border-radius: 18px;
+            border: none;
+            cursor: pointer; text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 30px rgba(0,136,204,0.3);
+            transform: translateZ(35px);
+        }
+
+        .gate-btn:hover {
+            transform: translateY(-4px) translateZ(50px) scale(1.03);
+            box-shadow: 0 12px 50px rgba(0,136,204,0.4);
+        }
+
+        .gate-btn:active { transform: scale(0.97); }
+
+        .gate-skip {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #6666aa;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+        }
+
+        .gate-skip:hover { color: #aaaaff; }
+
+        /* ===== HEADER ===== */
+        header { text-align: center; padding: 2.5rem 0 1.5rem; position: relative; transform-style: preserve-3d; transform: translateZ(30px); }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 10%; right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00d4ff, #00ff88, #ffcc00, #ff4ecd, #7b2ff7, transparent);
+            border-radius: 2px;
+        }
+
+        .logo-3d {
+            font-size: 4.5rem; display: block; margin-bottom: 0.3rem;
+            filter: drop-shadow(0 0 30px rgba(0,212,255,0.3)) drop-shadow(0 0 60px rgba(123,47,247,0.2));
+            animation: float3d 4s ease-in-out infinite;
+            text-shadow: 0 0 40px rgba(0,212,255,0.4), 0 0 80px rgba(255,200,0,0.2);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes float3d {
+            0%, 100% { transform: translateY(0px) scale(1) rotateX(0deg) rotateY(0deg); }
+            25% { transform: translateY(-10px) scale(1.04) rotateX(2deg) rotateY(-4deg); }
+            50% { transform: translateY(-15px) scale(1.06) rotateX(-2deg) rotateY(5deg); }
+            75% { transform: translateY(-5px) scale(1.02) rotateX(3deg) rotateY(-3deg); }
+        }
+
+        header h1 {
+            font-size: 2.8rem; font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 25%, #ffcc00 50%, #ff4ecd 75%, #7b2ff7 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: -0.5px;
+            filter: drop-shadow(0 2px 30px rgba(123,47,247,0.3));
+            transform: translateZ(45px);
+            text-shadow: 0 1px 0 rgba(0,212,255,0.2), 0 3px 6px rgba(0,0,0,0.5);
+        }
+
+        header .sub {
+            color: #8888bb; font-size: 1rem; margin-top: 0.6rem; letter-spacing: 1px;
+            transform: translateZ(15px);
+        }
+
+        header .sub span {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,78,205,0.1));
+            border: 1px solid rgba(255,200,0,0.2);
+            padding: 0.2rem 1.2rem; border-radius: 20px; font-size: 0.8rem;
+            color: #ffdd44; font-weight: 700; margin-top: 0.4rem;
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 10px rgba(255,200,0,0.1); }
+            to { box-shadow: 0 0 25px rgba(255,200,0,0.3); }
+        }
+
+        /* ===== TG BANNER ===== */
+        .tg-card {
+            display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+            background: linear-gradient(135deg, rgba(0,136,204,0.15), rgba(0,136,204,0.05));
+            border: 1px solid rgba(0,136,204,0.25); border-radius: 18px;
+            padding: 1.1rem 2rem; margin: 1.5rem 0 2rem;
+            text-decoration: none; color: #fff; font-weight: 700; font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(0,136,204,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+            position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(600px) rotateX(1deg) translateZ(10px);
+        }
+
+        .tg-card::before {
+            content: '';
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,136,204,0.08), transparent, rgba(0,136,204,0.08), transparent);
+            animation: rotateGlow 6s linear infinite;
+        }
+
+        @keyframes rotateGlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .tg-card:hover {
+            background: linear-gradient(135deg, rgba(0,136,204,0.22), rgba(0,136,204,0.1));
+            transform: perspective(600px) rotateX(0deg) scale(1.02) translateY(-3px) translateZ(25px);
+            box-shadow: 0 10px 40px rgba(0,136,204,0.2);
+            border-color: rgba(0,136,204,0.4);
+        }
+
+        .tg-card .icon { font-size: 2rem; position: relative; z-index: 1; }
+        .tg-card .text { position: relative; z-index: 1; }
+        .tg-card .hl { color: #55ccff; }
+
+        /* ===== HOW TO ===== */
+        .howto {
+            background: linear-gradient(135deg, rgba(255,200,0,0.08), rgba(255,100,0,0.04));
+            border: 1px solid rgba(255,200,0,0.15); border-radius: 16px;
+            padding: 1.1rem 1.5rem; margin-bottom: 2rem;
+            font-size: 0.85rem; color: #ddddaa; line-height: 1.7;
+            transform-style: preserve-3d;
+            transform: perspective(600px) rotateX(0.5deg) translateZ(5px);
+            transition: transform 0.3s ease;
+        }
+
+        .howto:hover { transform: perspective(600px) rotateX(0deg) translateZ(18px); }
+
+        .howto strong { color: #ffee66; }
+
+        /* ===== BULK ===== */
+        .bulk-section {
+            display: flex; gap: 0.7rem; flex-wrap: wrap; justify-content: center;
+            margin: 0.5rem 0 2rem;
+            transform-style: preserve-3d;
+        }
+
+        .bulk-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.1); color: #ddd;
+            font-weight: 700; font-size: 0.85rem;
+            padding: 0.75rem 1.6rem; border-radius: 14px;
+            cursor: pointer; text-decoration: none; transition: all 0.25s ease;
+            transform-style: preserve-3d;
+        }
+
+        .bulk-btn:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+            border-color: rgba(255,255,255,0.2); transform: translateY(-3px) translateZ(18px);
+        }
+
+        .bulk-btn:active { transform: scale(0.97); }
+
+        .bulk-btn.gold {
+            background: linear-gradient(135deg, rgba(255,200,0,0.2), rgba(255,100,0,0.15));
+            border-color: rgba(255,200,0,0.25); color: #ffee88;
+        }
+
+        .bulk-btn.gold:hover {
+            background: linear-gradient(135deg, rgba(255,200,0,0.3), rgba(255,100,0,0.2));
+            border-color: rgba(255,200,0,0.4);
+        }
+
+        .bulk-btn.green {
+            background: linear-gradient(135deg, rgba(0,255,100,0.15), rgba(0,200,80,0.1));
+            border-color: rgba(0,255,100,0.2); color: #88ffaa;
+        }
+
+        .bulk-btn.green:hover {
+            background: linear-gradient(135deg, rgba(0,255,100,0.25), rgba(0,200,80,0.15));
+            border-color: rgba(0,255,100,0.35);
+        }
+
+        /* ===== CATEGORY ===== */
+        .category {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.06); border-radius: 24px;
+            padding: 1.8rem 1.5rem 2rem; margin-bottom: 1.8rem;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 4px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+            position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(800px) rotateX(1deg) translateZ(10px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .category::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0.4; border-radius: 24px 24px 0 0;
+        }
+
+        .category.gold-cat::before { color: #ffcc00; }
+        .category.blue-cat::before { color: #00d4ff; }
+        .category.green-cat::before { color: #00ff88; }
+        .category.purple-cat::before { color: #7b2ff7; }
+
+        .category:hover {
+            border-color: rgba(255,255,255,0.12);
+            box-shadow: 0 12px 60px rgba(0,0,0,0.4);
+            transform: perspective(800px) rotateX(0deg) translateY(-3px) translateZ(30px);
+        }
+
+        .cat-title {
+            display: flex; align-items: center; gap: 0.7rem;
+            font-size: 1.6rem; font-weight: 800; color: #fff;
+            transform: translateZ(12px);
+        }
+
+        .cat-title .emoji { font-size: 2rem; display: inline-block; }
+        .cat-title .emoji.glow-blue { filter: drop-shadow(0 0 15px rgba(0,212,255,0.4)); animation: floatEmoji 3s ease-in-out infinite; }
+        .cat-title .emoji.glow-gold { filter: drop-shadow(0 0 15px rgba(255,200,0,0.4)); animation: floatEmoji 3s ease-in-out infinite 1.5s; }
+        .cat-title .emoji.glow-green { filter: drop-shadow(0 0 15px rgba(0,255,100,0.4)); animation: floatEmoji 3s ease-in-out infinite 0.75s; }
+
+        @keyframes floatEmoji {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            50% { transform: translateY(-5px) rotateY(12deg); }
+        }
+
+        .cat-count {
+            font-size: 0.8rem; color: #7777aa;
+            margin: 0.2rem 0 1.2rem; padding-bottom: 0.6rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.3rem;
+        }
+
+        /* ===== PROFILE ===== */
+        .profile {
+            background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(0,0,0,0.25));
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
+            padding: 1.2rem 1.4rem; margin-bottom: 1rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            transform-style: preserve-3d;
+            transform: perspective(600px) rotateX(0.5deg) translateZ(2px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, background 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .profile:last-child { margin-bottom: 0; }
+
+        .profile:hover {
+            background: linear-gradient(145deg, rgba(0,0,0,0.55), rgba(255,255,255,0.05));
+            transform: perspective(600px) rotateX(0deg) translateY(-4px) translateZ(25px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5), 0 0 25px rgba(0,212,255,0.06);
+            border-color: rgba(0,212,255,0.15);
+        }
+
+        .profile.border-blue { border-left: 3px solid #00d4ff; }
+        .profile.border-gold { border-left: 3px solid #ffcc00; }
+        .profile.border-green { border-left: 3px solid #00ff88; }
+        .profile.border-white { border-left: 3px solid #ffffff; }
+
+        .info { flex: 1; min-width: 0; transform: translateZ(8px); }
+
+        .info .name {
+            font-weight: 700; font-size: 1.05rem; color: #fff;
+            display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+        }
+
+        .info .name .tag {
+            font-size: 0.6rem; font-weight: 700;
+            padding: 0.15rem 0.6rem; border-radius: 6px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            animation: tagPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes tagPulse {
+            from { opacity: 0.8; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
+
+        .info .name .tag.blue-glow { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,212,255,0.08)); color: #55ddff; border: 1px solid rgba(0,212,255,0.1); box-shadow: 0 0 12px rgba(0,212,255,0.1); }
+        .info .name .tag.gold-glow { background: linear-gradient(135deg, rgba(255,200,0,0.2), rgba(255,200,0,0.08)); color: #ffdd44; border: 1px solid rgba(255,200,0,0.1); box-shadow: 0 0 12px rgba(255,200,0,0.1); }
+        .info .name .tag.green-glow { background: linear-gradient(135deg, rgba(0,255,100,0.2), rgba(0,255,100,0.08)); color: #66ff99; border: 1px solid rgba(0,255,100,0.1); box-shadow: 0 0 12px rgba(0,255,100,0.1); }
+        .info .name .tag.white-glow { background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); color: #ffffff; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 0 12px rgba(255,255,255,0.08); }
+
+        .info .desc { font-size: 0.78rem; color: #7878aa; margin-top: 0.15rem; display: flex; align-items: center; gap: 0.4rem; }
+        .info .desc .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 0.2rem; }
+        .info .desc .dot.blue { background: #00d4ff; box-shadow: 0 0 8px rgba(0,212,255,0.5); }
+        .info .desc .dot.gold { background: #ffcc00; box-shadow: 0 0 8px rgba(255,200,0,0.5); }
+        .info .desc .dot.green { background: #00ff88; box-shadow: 0 0 8px rgba(0,255,100,0.5); }
+        .info .desc .dot.white { background: #ffffff; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+
+        .import-btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: linear-gradient(135deg, #00d4ff, #7b2ff7); color: #fff;
+            font-weight: 800; font-size: 0.8rem; padding: 0.7rem 1.4rem;
+            border-radius: 14px; border: none; cursor: pointer; text-decoration: none;
+            white-space: nowrap; flex-shrink: 0;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(0,212,255,0.15), 0 2px 5px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden;
+            transform-style: preserve-3d;
+            transform: translateZ(12px);
+        }
+
+        .import-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+
+        .import-btn:hover { transform: translateY(-4px) translateZ(20px) scale(1.03); box-shadow: 0 8px 40px rgba(0,212,255,0.3); }
+        .import-btn:hover::before { opacity: 1; }
+        .import-btn:active { transform: scale(0.96); }
+
+        .import-btn.gold { background: linea        .header .sub {
             font-size: 13px;
             color: #8892b0;
             margin-top: 6px;
@@ -298,6 +621,209 @@
             const msg = document.getElementById('gate-message');
             msg.innerHTML = '❌ Please join <a href="https://t.me/Free_Ethio_server_FES" target="_blank" style="color:#00c6ff;">@Free_Ethio_server_FES</a> first, then click <strong>Yes</strong> to access the configs.';
         }
-    </script>
+    <body>
+
+<div class="gate-overlay" id="gateOverlay">
+    <div class="gate-card">
+        <span class="gate-icon">&#128172;</span>
+        <h2>Join Our Telegram Channel</h2>
+        <p>
+            <strong>Access FREE ETHIO Internet</strong> VPN profiles below!
+            <br><br>
+            <span style="color:#00ff88;">&#10003; Fast &amp; Secure</span><br>
+            <span style="color:#ffcc00;">&#10003; NoizDNS Technology</span><br>
+            <span style="color:#ff4ecd;">&#10003; 24/7 Free Access</span>
+            <br><br>
+            <span class="highlight">@Free_Ethio_server_FES</span>
+        </p>
+        <span class="gate-fire">🔥🔥🔥</span>
+        <a class="gate-btn" href="https://t.me/Free_Ethio_server_FES" target="_blank" rel="noopener" onclick="setTimeout(function(){ document.getElementById('gateOverlay').style.display='none'; }, 1200);">
+            &#128172; Join Channel
+        </a>
+        <br>
+        <button class="gate-skip" onclick="document.getElementById('gateOverlay').style.display='none';">
+            &#10003; I've already joined &#10003; Continue to Free Internet
+        </button>
+    </div>
+</div>
+
+<div class="container">
+
+    <header>
+        <span class="logo-3d">&#127760;</span>
+        <h1>FES SLIPNET VPN 🔥</h1>
+        <div class="sub">
+            Free Internet for Ethiopia &bull; Fast &bull; NoizDNS
+            <br><span>🔥 FREE ETHIO INTERNET 🔥</span>
+        </div>
+    </header>
+
+    <a class="tg-card" href="https://t.me/Free_Ethio_server_FES" target="_blank" rel="noopener">
+        <span class="icon">&#128172;</span>
+        <span class="text">Join <span class="hl">@Free_Ethio_server_FES</span> for latest updates &#8599;</span>
+    </a>
+
+    <div class="howto">
+        <strong>&#9889; How to use:</strong> Click any <strong>Import</strong> button &mdash; VPN opens automatically.<br>
+        <strong>🔥 Free ETHIO Internet &bull; Fast &bull; Secure &bull; NoizDNS</strong>
+    </div>
+
+    <div class="bulk-section">
+        <button class="bulk-btn gold" onclick="importCategory('fast')">🔥 Import All Fast (2)</button>
+        <button class="bulk-btn green" onclick="importCategory('free')">⚡ Import All Free (2)</button>
+        <button class="bulk-btn" onclick="importAll()" style="background:linear-gradient(135deg,rgba(255,200,0,0.25),rgba(255,78,205,0.15),rgba(0,212,255,0.1));">🔥 Import All 4 Profiles 🔥</button>
+    </div>
+
+    <!-- ===== ETHIO FAST 🔥 ===== -->
+    <div class="category gold-cat">
+        <div class="cat-title">
+            <span class="emoji glow-gold">🔥</span>
+            <span style="background:linear-gradient(135deg,#ffcc00,#ff8800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ETHIO Fast Internet 🔥</span>
+        </div>
+        <div class="cat-count">
+            <span>2 profiles &mdash; Ultra fast &bull; Premium nodes</span>
+            <span style="color:#ffcc00;">&#9672; HOT 🔥</span>
+        </div>
+
+        <div class="profile border-gold">
+            <div class="info">
+                <div class="name">
+                    🔥 ETHIO FREE FAST
+                    <span class="tag gold-glow">🔥 HOT</span>
+                </div>
+                <div class="desc"><span class="dot gold"></span> Ethio free internet fast 🔥🔥🔥</div>
+            </div>
+            <a class="import-btn gold" href="slipnet-enc://AZ5UfjvAXTt9fyShCVN5s/RCF4hylLml1gYIaGwyFE7slcHxi7c0d7GQM3y6XDV04YvqgFGkjDLUf/DVtmb9ZCBk//0guiWNmG7Z7NAy1Gyr0pl/PzhoLyEdBHH2woBXnckBmCY05RrD1VSyD1wqOyTkAcLiOToRZwN+cenvknOO2CFkZtX/dB+u2Pmxxq78P1t8BfFOvc/VwT6A0VTd9NaeC7wgOh01vvoEmRUVUbrhZeGGIUu1zT33wmKDnB/ig1cRPsjJ9/zE5C5S3OV1lmLvRCBwbzdSxjcT3h3K4gQ17nSJCZhyPTMsL5vbkBG3qLhswU/MNQUQtI4dMES0RdZguTDPCXHGIOtcJWNrVuSJoeT5vlsPqk0WTAV0zCX6xRv2yLdwWvG0nTdjvzLiPXeP6Z8v8V0HQnEnaAmeTQjBj9Ayl2zKaxYEgef5VKNCjsuR4ByPbZDjmNpnwTTA0jAQJLeqzktDmvnlFnBVm3NpwZeuXthmCERasQCoIywBHNgjr4nVzC2H4F6YPHw1njrAMDrC/ZFTasQ9Y8h/mcNov8IOg3+aSFOeFCG6UzZvsSRcmkCfjMpNzR7NMA6uShhcETxjceAx9actEUU/yfZvfJt1d/XIhecUPiKRxA1ZCvoSiVhwTkbRBwR/jbcL8kzGuWfIcuWFFjDHj23NcBXP9so=" target="_self">
+                <span class="arrow">🔥</span> Import
+            </a>
+        </div>
+
+        <div class="profile border-gold">
+            <div class="info">
+                <div class="name">
+                    ⚡ ETHIO VERY FAST
+                    <span class="tag gold-glow">🔥 HOT</span>
+                </div>
+                <div class="desc"><span class="dot gold"></span> ETHIO Very fast &bull; Premium speed</div>
+            </div>
+            <a class="import-btn gold" href="slipnet-enc://Aa/0fbJs53dsC6tEc6mQHEFnBlHlYCwGACp2XxF2bNg6guZtMaGnQcwh2AASNmUq6LCQqCF1wDQpLmI7Y3tbFB17b4oGPFjmc3wtPRpYyhnDtUd2BpJl9pSIfjCdV90jpOReRYXL0bS6nsyr1/qwvAWnBQ1K4FDkWIvHVl5mf4feIZYNuvwrMTFSGBKgyoE8j7np08Q7LP1ZjeAEU4V7xW3XJ0wLIdoRzAzlhJ0UFNXEIWxsyzczrl8OcO7m9Ue0aDuzJ8EowhJ9esRVluOWjcwsLGbb8OC7ZHieVJeY90dpdkuMmg00FIG6NIC1wx7MITse+cD0Pr0mxeMVCCqtM5oVD6SoahNfmEmbpMdOAuVrWsnl2uvphEP0hFl3xdMg/lSGXyiICKy6knkDL74cOHl1eurP1WAVDnzcCug3n/veWArGwREYmMLihCJAXRjJdimEIlq0z/Gx+R7vpRwUK2iI/QruoZsR0Jn6d+lr5bvFzR4QM2J3qN90FDO78PkWgfY1X9QBTyhg5qkUOo17REuB1JUzzBZZ7qzEuUKr7eWTdqwBUwL4WxkgGHhwYyG0ElSgR5/PHIWR0dtSOqTCSrpEz2NGiVQAuN3zttUocIbTRBS5uhPh6GDbZudu84WHt5sWqRJe6m22KyOq4KYqnODX3sxaDJ3OSm0K6v5ACWO12AY=" target="_self">
+                <span class="arrow">⚡</span> Import
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== ETHIO FREE 🔥 ===== -->
+    <div class="category green-cat">
+        <div class="cat-title">
+            <span class="emoji glow-green">&#127758;</span>
+            <span style="background:linear-gradient(135deg,#00ff88,#00cc66);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ETHIO Free Internet</span>
+        </div>
+        <div class="cat-count">
+            <span>2 profiles &mdash; Free &bull; Fast &bull; NoizDNS</span>
+            <span style="color:#00ff88;">&#9670; FREE TIER</span>
+        </div>
+
+        <div class="profile border-green">
+            <div class="info">
+                <div class="name">
+                    &#127760; ETHIO FREE FAST
+                    <span class="tag green-glow">&#9889; FREE</span>
+                </div>
+                <div class="desc"><span class="dot green"></span> Ethio free fast 🔥🔥🔥 &mdash; Premium free</div>
+            </div>
+            <a class="import-btn green" href="slipnet-enc://AZmtzyNqrgh/xk/E3ovE1iGx6azLsW+6Uf5HHRRVRuV3ORNbkbQczezDECaWrggkCKEW+9WDjyuLJZVwCNz5EGbk3KiWVSgGmsr5w5ToM+wf09XBZMlYKe4CXuBuZQ4y8fWbUdssQeWfLI0EO5bNvaBXxYV8+eLckIOGARfxCsHjfCNxIvaa0xMgevUNyQbbF98/DDEOrIPDnDjV6GZSW28DKTtjof4Ln7VBWseL2pG2zGjXiYK0l7Nep9pRsUwQQCvOwSBsOUtklYLT7HToLUuhSbIhI89A0QmiNmyQMzBcPKAEZa6WNc5rlszNRPvNF4oz8H+CeHM9iGyvDYp9kEzvQAQYsc8eV6d/LI6WOvDQcWc+VWgxwTh+35gLjYG2ahPB62w2MEf6oIooqVehcq9bqd002Qutgp4E93XYdMrFJqR19HVZFae9cM2QDlxJjxJo7goaY9huclihQI9MgmpXMxe+CfqHZA9RvQbzkOGXAxn/iUSUVYOHlDhZ7WoN64lvnxnvk3AxZrdQ2iboozN/ci8BSYW/MxBf3tnUfKa5MyntMuu8upv88h2Sdobq5w1Ff7h1kR/Q0eRDsUcWgfdDptXuRIsOdDsaE0/F72POYdeQSZosglLIe4+eo8xf6+HB/XwOlSaLv7vi" target="_self">
+                <span class="arrow">🔥</span> Import
+            </a>
+        </div>
+
+        <div class="profile border-green">
+            <div class="info">
+                <div class="name">
+                    &#9889; ETHIO FREE
+                    <span class="tag green-glow">&#9889; FREE</span>
+                </div>
+                <div class="desc"><span class="dot green"></span> ETHIO FREE 🔥🔥🔥 &mdash; Best speed</div>
+            </div>
+            <a class="import-btn green" href="slipnet-enc://AZAJCmM/9rf1iZE5SoPDoka5EMqluYhMlt8LE+LYk+UxAOjnZjkovmSVnQeg/LW/aj6Vcc5VaQ6FgFuqIwVIRCrodzdSk1l/X5dzwL7SXxR21jjvH+b4jmGe7x+q0sxP4pZnP2pHwR3cafK+69ezSu48XKJqDaLi9yHtfFWH/EYkllmqs3n8OZfWhJoH2XUzogm9ZI9gB1owsReDhxy2AZyd5L0N5fRdXi3wHJZz0LjtMdHcMLsLPaNH7ph4sX9iBIiO8WrOB72rG/6DkCWulpfUfFnJ1tuGgaw9+kJQOOOGYrpPMZpdYF/0C+Q3GvZgWadXbAa7RyhqY5O0I2HqhEaDjdpbp4g9megIQ4qTh7osZfgMRWsMRTER/3PRDJxZxTjIoix8SoQGbHy/DhnsMQEY6uMVry8wj/5YNMuxTvvNIz3v+oe0tWndSvfhGjeJ6k0XZZ1bjwBMuqefUQsdm+niXT86odeY4E/lsGiXC5JEOWXJcMyOBQomYB9vbSX671KW9wT4XaS4Mqn2maMfzSU+dOXEGUVOoNvmkAfHa0S/k8G4X5Yk3Dq1qC0i1RdfAq1MpzT4UPku5LsnqzC3QRltGmpTRIMyC0IObMXIL8ATpyqg/EtzPfj5440FPpvA+/Zn3z5rLDXZsi5fEQ1NUVzC839TmQem45EsYMqrMQSMzg==" target="_self">
+                <span class="arrow">🔥</span> Import
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        Powered by <a href="https://t.me/Free_Ethio_server_FES" target="_blank" rel="noopener">FES &mdash; Free Ethio Server</a>
+        &middot; Made with <span class="heart">&#10084;</span> for Ethiopia
+        <br><span class="fire-text" style="margin-top:0.5rem;display:inline-block;">🔥 FREE ETHIO INTERNET 🔥</span>
+    </footer>
+</div>
+  <script>
+const profileData = {
+    fast: [
+        { name: 'ETHIO FREE FAST', uri: 'slipnet-enc://AZ5UfjvAXTt9fyShCVN5s/RCF4hylLml1gYIaGwyFE7slcHxi7c0d7GQM3y6XDV04YvqgFGkjDLUf/DVtmb9ZCBk//0guiWNmG7Z7NAy1Gyr0pl/PzhoLyEdBHH2woBXnckBmCY05RrD1VSyD1wqOyTkAcLiOToRZwN+cenvknOO2CFkZtX/dB+u2Pmxxq78P1t8BfFOvc/VwT6A0VTd9NaeC7wgOh01vvoEmRUVUbrhZeGGIUu1zT33wmKDnB/ig1cRPsjJ9/zE5C5S3OV1lmLvRCBwbzdSxjcT3h3K4gQ17nSJCZhyPTMsL5vbkBG3qLhswU/MNQUQtI4dMES0RdZguTDPCXHGIOtcJWNrVuSJoeT5vlsPqk0WTAV0zCX6xRv2yLdwWvG0nTdjvzLiPXeP6Z8v8V0HQnEnaAmeTQjBj9Ayl2zKaxYEgef5VKNCjsuR4ByPbZDjmNpnwTTA0jAQJLeqzktDmvnlFnBVm3NpwZeuXthmCERasQCoIywBHNgjr4nVzC2H4F6YPHw1njrAMDrC/ZFTasQ9Y8h/mcNov8IOg3+aSFOeFCG6UzZvsSRcmkCfjMpNzR7NMA6uShhcETxjceAx9actEUU/yfZvfJt1d/XIhecUPiKRxA1ZCvoSiVhwTkbRBwR/jbcL8kzGuWfIcuWFFjDHj23NcBXP9so=' },
+        { name: 'ETHIO VERY FAST', uri: 'slipnet-enc://Aa/0fbJs53dsC6tEc6mQHEFnBlHlYCwGACp2XxF2bNg6guZtMaGnQcwh2AASNmUq6LCQqCF1wDQpLmI7Y3tbFB17b4oGPFjmc3wtPRpYyhnDtUd2BpJl9pSIfjCdV90jpOReRYXL0bS6nsyr1/qwvAWnBQ1K4FDkWIvHVl5mf4feIZYNuvwrMTFSGBKgyoE8j7np08Q7LP1ZjeAEU4V7xW3XJ0wLIdoRzAzlhJ0UFNXEIWxsyzczrl8OcO7m9Ue0aDuzJ8EowhJ9esRVluOWjcwsLGbb8OC7ZHieVJeY90dpdkuMmg00FIG6NIC1wx7MITse+cD0Pr0mxeMVCCqtM5oVD6SoahNfmEmbpMdOAuVrWsnl2uvphEP0hFl3xdMg/lSGXyiICKy6knkDL74cOHl1eurP1WAVDnzcCug3n/veWArGwREYmMLihCJAXRjJdimEIlq0z/Gx+R7vpRwUK2iI/QruoZsR0Jn6d+lr5bvFzR4QM2J3qN90FDO78PkWgfY1X9QBTyhg5qkUOo17REuB1JUzzBZZ7qzEuUKr7eWTdqwBUwL4WxkgGHhwYyG0ElSgR5/PHIWR0dtSOqTCSrpEz2NGiVQAuN3zttUocIbTRBS5uhPh6GDbZudu84WHt5sWqRJe6m22KyOq4KYqnODX3sxaDJ3OSm0K6v5ACWO12AY=' }
+    ],
+    free: [
+        { name: 'ETHIO FREE FAST 🔥', uri: 'slipnet-enc://AZmtzyNqrgh/xk/E3ovE1iGx6azLsW+6Uf5HHRRVRuV3ORNbkbQczezDECaWrggkCKEW+9WDjyuLJZVwCNz5EGbk3KiWVSgGmsr5w5ToM+wf09XBZMlYKe4CXuBuZQ4y8fWbUdssQeWfLI0EO5bNvaBXxYV8+eLckIOGARfxCsHjfCNxIvaa0xMgevUNyQbbF98/DDEOrIPDnDjV6GZSW28DKTtjof4Ln7VBWseL2pG2zGjXiYK0l7Nep9pRsUwQQCvOwSBsOUtklYLT7HToLUuhSbIhI89A0QmiNmyQMzBcPKAEZa6WNc5rlszNRPvNF4oz8H+CeHM9iGyvDYp9kEzvQAQYsc8eV6d/LI6WOvDQcWc+VWgxwTh+35gLjYG2ahPB62w2MEf6oIooqVehcq9bqd002Qutgp4E93XYdMrFJqR19HVZFae9cM2QDlxJjxJo7goaY9huclihQI9MgmpXMxe+CfqHZA9RvQbzkOGXAxn/iUSUVYOHlDhZ7WoN64lvnxnvk3AxZrdQ2iboozN/ci8BSYW/MxBf3tnUfKa5MyntMuu8upv88h2Sdobq5w1Ff7h1kR/Q0eRDsUcWgfdDptXuRIsOdDsaE0/F72POYdeQSZosglLIe4+eo8xf6+HB/XwOlSaLv7vi' },
+        { name: 'ETHIO FREE', uri: 'slipnet-enc://AZAJCmM/9rf1iZE5SoPDoka5EMqluYhMlt8LE+LYk+UxAOjnZjkovmSVnQeg/LW/aj6Vcc5VaQ6FgFuqIwVIRCrodzdSk1l/X5dzwL7SXxR21jjvH+b4jmGe7x+q0sxP4pZnP2pHwR3cafK+69ezSu48XKJqDaLi9yHtfFWH/EYkllmqs3n8OZfWhJoH2XUzogm9ZI9gB1owsReDhxy2AZyd5L0N5fRdXi3wHJZz0LjtMdHcMLsLPaNH7ph4sX9iBIiO8WrOB72rG/6DkCWulpfUfFnJ1tuGgaw9+kJQOOOGYrpPMZpdYF/0C+Q3GvZgWadXbAa7RyhqY5O0I2HqhEaDjdpbp4g9megIQ4qTh7osZfgMRWsMRTER/3PRDJxZxTjIoix8SoQGbHy/DhnsMQEY6uMVry8wj/5YNMuxTvvNIz3v+oe0tWndSvfhGjeJ6k0XZZ1bjwBMuqefUQsdm+niXT86odeY4E/lsGiXC5JEOWXJcMyOBQomYB9vbSX671KW9wT4XaS4Mqn2maMfzSU+dOXEGUVOoNvmkAfHa0S/k8G4X5Yk3Dq1qC0i1RdfAq1MpzT4UPku5LsnqzC3QRltGmpTRIMyC0IObMXIL8ATpyqg/EtzPfj5440FPpvA+/Zn3z5rLDXZsi5fEQ1NUVzC839TmQem45EsYMqrMQSMzg==' }
+    ]
+};
+
+function importCategory(cat) {
+    const profiles = profileData[cat];
+    if (!profiles || profiles.length === 0) return;
+    window.location.href = profiles[0].uri;
+    showNotice(`🔥 Opening ${profiles[0].name} in Slipnet...\nTap Import for the other ${profiles.length-1} profile(s).`);
+}
+
+function importAll() {
+    window.location.href = profileData.fast[0].uri;
+    showNotice('🔥 Opening ETHIO FREE FAST in Slipnet VPN...\n\nThen import the remaining 3 profiles.');
+}
+
+function showNotice(msg) {
+    const el = document.getElementById('fes-notice');
+    if (el) el.remove();
+
+    const div = document.createElement('div');
+    div.id = 'fes-notice';
+    div.style.cssText = [
+        'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%)',
+        'background:linear-gradient(145deg,rgba(10,10,40,0.97),rgba(20,10,60,0.97))',
+        'backdrop-filter:blur(16px)',
+        'border:1px solid rgba(255,200,0,0.15);border-radius:16px',
+        'padding:1.2rem 1.8rem;max-width:420px;width:calc(100% - 2rem)',
+        'color:#ddddf0;font-size:0.85rem;line-height:1.6',
+        'z-index:99999;box-shadow:0 10px 50px rgba(0,0,0,0.7)',
+        'white-space:pre-line',
+        'border-left:3px solid #ffcc00'
+    ].join(';');
+
+    div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.7rem;">
+        <div>${msg}</div>
+        <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:#8888cc;font-size:1.4rem;cursor:pointer;padding:0 0.2rem;line-height:1;font-weight:bold;">&times;</button>
+    </div>`;
+
+    document.body.appendChild(div);
+    setTimeout(() => { const x = document.getElementById('fes-notice'); if (x) x.remove(); }, 8000);
+}
+
+/* ===== 3D MOUSE PARALLAX ===== */
+(function() {
+    const body = document.body;
+    let ticking = false,$0
+
+    body.addEventListener('mousemove', function(e) {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function() {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = ((e.clientY + window.scrollY) / (window.innerHeight + window.scrollY) - 0.5) * 2;
+            body.style.setProperty('--mouse-x', x);
+            body.style.setProperty('--mouse-y', y);
+            ticking = false;
+        });
+    });
+})();
+</script>
 </body>
-</html>
+</html>      
