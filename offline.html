@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Offline — FES Ethiopia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --surface: #111827;
+      --border: #1e2d45;
+      --accent: #00d4ff;
+      --accent2: #ff6b35;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --glow: rgba(0, 212, 255, 0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Space Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* Animated grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+
+    /* Radial glow */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 600px;
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+      z-index: 0;
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* Signal tower icon */
+    .icon-wrap {
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+
+    .tower {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .tower svg {
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 0 12px var(--accent));
+    }
+
+    /* Signal rings */
+    .signal-rings {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .ring {
+      position: absolute;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      opacity: 0;
+      animation: ripple 3s ease-out infinite;
+    }
+
+    .ring:nth-child(1) { width: 80px; height: 80px; margin: -40px; animation-delay: 0s; }
+    .ring:nth-child(2) { width: 130px; height: 130px; margin: -65px; animation-delay: 0.8s; }
+    .ring:nth-child(3) { width: 180px; height: 180px; margin: -90px; animation-delay: 1.6s; }
+
+    /* OFFLINE rings are red/dimmed */
+    .offline .ring { border-color: var(--accent2); }
+    .offline .tower svg { filter: drop-shadow(0 0 12px var(--accent2)); }
+
+    @keyframes ripple {
+      0% { opacity: 0.7; transform: scale(0.8); }
+      100% { opacity: 0; transform: scale(1.4); }
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 107, 53, 0.12);
+      border: 1px solid rgba(255, 107, 53, 0.4);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent2);
+      animation: blink 1.2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* Heading */
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #e2e8f0 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h1 span {
+      display: block;
+      font-size: 0.45em;
+      letter-spacing: 0.05em;
+      font-weight: 400;
+      background: linear-gradient(135deg, var(--accent2) 0%, #ffd166 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .description {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 380px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Action buttons */
+    .actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,212,255,0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Info cards */
+    .cards {
+      display: flex;
+      gap: 1rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      min-width: 140px;
+      text-align: left;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--accent); }
+
+    .card-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .card-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* Footer brand */
+    .brand {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      z-index: 2;
+    }
+
+    .brand strong { color: var(--accent); }
+
+    /* Online indicator (shown when back online) */
+    #online-toast {
+      position: fixed;
+      bottom: 4rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #10b981;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    #online-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="icon-wrap offline">
+      <div class="signal-rings">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+      </div>
+      <div class="tower">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- WiFi off icon -->
+          <circle cx="32" cy="48" r="4" fill="#ff6b35"/>
+          <path d="M20 36c3.3-3.3 7.8-5 12-5s8.7 1.7 12 5" stroke="#ff6b35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.4"/>
+          <path d="M12 28c5.5-5.5 13-8.5 20-8.5s14.5 3 20 8.5" stroke="#ff6b35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.2"/>
+          <!-- X mark -->
+          <line x1="10" y1="10" x2="54" y2="54" stroke="#ff6b35" stroke-width="3" stroke-linecap="round"/>
+          <line x1="54" y1="10" x2="10" y2="54" stroke="#ff6b35" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="status-badge">
+      <div class="dot"></div>
+      No Connection
+    </div>
+
+    <h1>
+      You're Offline
+      <span>FES Ethiopia</span>
+    </h1>
+
+    <p class="description">
+      No internet connection detected. Check your network settings and try again — or reload when you're back online.
+    </p>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="location.reload()">
+        ↻ Try Again
+      </button>
+      <button class="btn btn-secondary" onclick="history.back()">
+        ← Go Back
+      </button>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Status</div>
+        <div class="card-value" id="status-val">Offline</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Time</div>
+        <div class="card-value" id="time-val">--:--</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Last Seen</div>
+        <div class="card-value" id="last-seen">Just now</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="online-toast">✓ Connection restored — reloading…</div>
+
+  <div class="brand">
+    <strong>FREE ETHIO SERVER</strong> · t.me/Free_Ethio_server_FES
+  </div>
+
+  <script>
+    // ── Live clock ─────────────────────────────
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('time-val').textContent =
+        now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ── Last seen time ─────────────────────────
+    const offlineTime = new Date();
+    document.getElementById('last-seen').textContent =
+      offlineTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    // ── Online/offline detection ───────────────
+    function onOnline() {
+      document.getElementById('status-val').textContent = 'Back Online';
+      const toast = document.getElementById('online-toast');
+      toast.classList.add('show');
+      setTimeout(() => location.reload(), 2000);
+    }
+
+    function onOffline() {
+      document.getElementById('status-val').textContent = 'Offline';
+    }
+
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
+
+    // Check immediately in case already online
+    if (navigator.onLine) {
+      document.getElementById('status-val').textContent = 'Back Online';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!-- ================================================
+  STEP 1: Add this <script> block to your index.html
+  just before the closing </body> tag.
+  ================================================ -->
+
+<script>
+  // Register Service Worker for offline support
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => {
+          console.log('[FES] Service Worker registered:', reg.scope);
+        })
+        .catch((err) => {
+          console.warn('[FES] Service Worker failed:', err);
+        });
+    });
+  }
+</script>
+
+
+<!-- ================================================
+  STEP 2: Optional — add this <link> in your <head>
+  for PWA / Web App Manifest support.
+  ================================================ -->
+
+<link rel="manifest" href="/site.webmanifest" />
